@@ -20,3 +20,26 @@ Create a program that converts temperatures between Celsius, Fahrenheit, and Kel
 
 ![image](https://github.com/SasankSami21/PRODIGY_SD_01/assets/112636647/cff893a3-38e1-4c45-ac69-facb1263757a)
 
+Function GenerateDAG(epoch):
+    size = CalculateDAGSize(epoch)  // Calculate size based on epoch
+    DAG = CreateNewDAG(size)         // Create a new DAG
+    StoreDAGInMemory(DAG)             // Store DAG in miner's memory
+    Return DAG
+
+Function MixData(blockHeader, nonce, DAG):
+    mixHash = Hash(blockHeader + nonce)  // Create initial mix hash
+    dataChunks = FetchDataFromDAG(DAG, mixHash)  // Retrieve data from DAG
+    Return dataChunks
+
+Function HashData(dataChunks):
+    mixHash = InitialMixHash()  // Initialize mix hash
+    For each chunk in dataChunks:
+        mixHash = Keccak256(mixHash + chunk)  // Hash each chunk with mix hash
+    Return mixHash
+
+Function VerifyAndSubmitBlock(block, minerID, difficultyThreshold):
+    mixHash = HashData(MixData(block.header, block.nonce, DAG))  // Hashing process
+    If mixHash < difficultyThreshold:  // Check mining success
+        If ValidateBlock(block):  // Validate the block
+            AddBlockToBlockchain(block)  // Submit the block
+            RewardMiner(minerID)  // Reward the miner
